@@ -86,6 +86,15 @@ export async function requireUserId(
   return userId;
 }
 
+export async function requireGuest(request: Request) {
+  const session = await getUserSession(request);
+  const userId = session.get("userId");
+
+  if (userId) {
+    throw redirect("/");
+  }
+}
+
 function getUserSession(request: Request) {
   return storage.getSession(request.headers.get("Cookie"));
 }

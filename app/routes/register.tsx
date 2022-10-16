@@ -1,8 +1,8 @@
-import type { ActionFunction } from "@remix-run/node";
+import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { useActionData } from "@remix-run/react";
 import { Link } from "react-router-dom";
 import { Card } from "~/components/Card";
-import { register } from "~/util/auth.server";
+import { register, requireGuest } from "~/util/auth.server";
 
 type ActionData = any;
 
@@ -18,6 +18,12 @@ export const action: ActionFunction = async ({
   }
 
   return register({ email, password });
+};
+
+export const loader: LoaderFunction = async ({ request }) => {
+  await requireGuest(request);
+
+  return null;
 };
 
 export default function Register() {

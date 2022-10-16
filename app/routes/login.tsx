@@ -1,7 +1,7 @@
-import type { ActionFunction } from "@remix-run/node";
+import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 import { Card } from "~/components/Card";
-import { login } from "~/util/auth.server";
+import { login, requireGuest } from "~/util/auth.server";
 
 export const action: ActionFunction = async ({ request }) => {
   const form = await request.formData();
@@ -13,6 +13,12 @@ export const action: ActionFunction = async ({ request }) => {
   }
 
   return login({ email, password });
+};
+
+export const loader: LoaderFunction = async ({ request }) => {
+  await requireGuest(request);
+
+  return null;
 };
 
 export default function Login() {
