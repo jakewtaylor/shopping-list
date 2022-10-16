@@ -1,5 +1,8 @@
+import type { Item } from "@prisma/client";
 import type { LoaderFunction } from "@remix-run/node";
 import { useFetcher, useLoaderData } from "@remix-run/react";
+import { useEffect, useRef } from "react";
+import { ListItem } from "~/components/ListItem";
 import { notFound } from "~/util/http.server";
 import type { ShoppingListWithItems } from "~/util/shoppingList.server";
 import { getShoppingList } from "~/util/shoppingList.server";
@@ -27,24 +30,34 @@ export default function List() {
 
   const createItemFetcher = useFetcher();
 
-  return (
-    <div className="h-full bg-stone-300">
-      <p>List</p>
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
-      <ul>
+  useEffect(() => {
+    if (!inputRef.current) return;
+
+    if (createItemFetcher.state === "idle") {
+      inputRef.current.value = "";
+    }
+  }, [createItemFetcher.state]);
+
+  return (
+    <div className="h-full bg-stone-300 p-6">
+      <ul className="space-y-2 font-serif text-lg">
         {list.items.map((item) => (
-          <li key={item.id}>{item.name}</li>
+          <ListItem key={item.id} item={item as Item} />
         ))}
       </ul>
 
       <div className="fixed bottom-0 left-0 right-0 bg-slate-100">
         <createItemFetcher.Form action="./items" method="post" className="flex">
           <input
+            ref={inputRef}
+            disabled={createItemFetcher.state === "submitting"}
             type="text"
             name="name"
             placeholder="New item"
             required
-            className="p-4 flex-grow"
+            className="p-4 flex-grow disabled: opacity-50"
           />
 
           <input

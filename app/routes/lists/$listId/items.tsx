@@ -1,4 +1,4 @@
-import type { ActionFunction } from "@remix-run/node";
+import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { notFound } from "~/util/http.server";
 import { createListItem } from "~/util/listItem.server";
@@ -19,4 +19,8 @@ export const action: ActionFunction = async ({ params, request }) => {
   const item = await createListItem(listId, name);
 
   return json({ item });
+};
+
+export const loader: LoaderFunction = () => {
+  throw notFound();
 };

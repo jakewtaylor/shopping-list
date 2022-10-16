@@ -29,8 +29,6 @@ export const loader: LoaderFunction = async ({ request }) => {
 export default function Register() {
   const data = useActionData<ActionData>();
 
-  console.log(data);
-
   return (
     <div className="h-full bg-stone-300">
       <div className="w-11/12 max-w-xl mx-auto pt-2">
