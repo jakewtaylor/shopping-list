@@ -1,33 +1,35 @@
 import type { ShoppingList } from "@prisma/client";
 import type { LoaderFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { prisma } from "~/util/prisma.server";
+import { requireUserId } from "~/util/auth.server";
+import { getShoppingListsByUserId } from "~/util/shoppingList.server";
 
 type LoaderData = {
+  userId: string;
   shoppingLists: ShoppingList[];
 };
 
-export const loader: LoaderFunction = async (): Promise<LoaderData> => {
-  const user = await prisma.user.findFirst({
-    where: { email: process.env.DEFAULT_USER_EMAIL! },
-    include: {
-      shoppingLists: true,
-    },
-  });
+export const loader: LoaderFunction = async ({
+  request,
+}): Promise<LoaderData> => {
+  const userId = await requireUserId(request);
 
-  const shoppingLists = user?.shoppingLists ?? [];
+  const shoppingLists = await getShoppingListsByUserId(userId);
 
-  return { shoppingLists };
+  return { userId, shoppingLists };
 };
 
 export default function Index() {
-  const { shoppingLists } = useLoaderData<LoaderData>();
+  const { userId, shoppingLists } = useLoaderData<LoaderData>();
 
   return (
-    <ul>
-      {shoppingLists.map((shoppingList) => (
-        <li key={shoppingList.id}>{shoppingList.name}</li>
-      ))}
-    </ul>
+    <>
+      <p>{userId}</p>
+      <ul>
+        {shoppingLists.map((shoppingList) => (
+          <li key={shoppingList.id}>{shoppingList.name}</li>
+        ))}
+      </ul>
+    </>
   );
 }
