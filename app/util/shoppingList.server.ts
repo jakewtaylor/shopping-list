@@ -1,4 +1,5 @@
 // import { subDays } from "date-fns";
+import type { Item, ShoppingList } from "@prisma/client";
 import { prisma } from "./prisma.server";
 
 export const getShoppingListsByUserId = async (userId: string) => {
@@ -35,6 +36,4 @@ export const getShoppingList = async (listId: string) => {
   });
 };
 
-export type ShoppingListWithItems = NonNullable<
-  Awaited<ReturnType<typeof getShoppingList>>
->;
+export type ShoppingListWithItems = ShoppingList & { items: Item[] };
