@@ -19,3 +19,9 @@ export const createShoppingList = async (userId: string, name: string) => {
     },
   });
 };
+
+export const getShoppingList = async (listId: string) => {
+  return await prisma.shoppingList.findUnique({
+    where: { id: listId },
+  });
+};
