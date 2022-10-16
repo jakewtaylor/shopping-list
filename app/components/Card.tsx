@@ -3,5 +3,5 @@ type CardProps = {
 };
 
 export const Card = ({ children }: CardProps) => {
-  return <div className="bg-stone-100 p-4 rounded shadow ">{children}</div>;
+  return <div className="flex flex-col">{children}</div>;
 };
