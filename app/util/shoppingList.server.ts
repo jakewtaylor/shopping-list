@@ -10,3 +10,12 @@ export const getShoppingListsByUserId = async (userId: string) => {
 
   return user?.shoppingLists ?? [];
 };
+
+export const createShoppingList = async (userId: string, name: string) => {
+  return await prisma.shoppingList.create({
+    data: {
+      name,
+      authorId: userId,
+    },
+  });
+};
