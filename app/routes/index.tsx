@@ -25,21 +25,29 @@ export default function Index() {
   return (
     <div className="h-full bg-stone-300 p-4 flex">
       <div className="flex flex-1 w-full">
-        <h1 className="font-bold">Your lists</h1>
-        <ul className="list-disc pl-4">
-          {shoppingLists.map((shoppingList) => (
-            <li key={shoppingList.id}>
-              <Link to={`/lists/${shoppingList.id}`} className="text-blue-600">
-                {shoppingList.name}
+        <div className="border border-gray-600 h-fit p-2 rounded-md">
+          <h1 className="font-bold">Your lists</h1>
+          <ul className="list-disc pl-4">
+            {shoppingLists.map((shoppingList) => (
+              <li
+                key={shoppingList.id}
+                className="hover:bg-stone-600 hover:bg-opacity-25 rounded-md p-2 duration-300 cursor-pointer"
+              >
+                <Link
+                  to={`/lists/${shoppingList.id}`}
+                  className="text-grey-600"
+                >
+                  {shoppingList.name}
+                </Link>
+              </li>
+            ))}
+            <li className="hover:bg-stone-600 hover:bg-opacity-25 rounded-md p-2">
+              <Link to="/lists/new" className="text-grey-600">
+                Create new list
               </Link>
             </li>
-          ))}
-          <li>
-            <Link to="/lists/new" className="text-blue-600">
-              Create new list
-            </Link>
-          </li>
-        </ul>
+          </ul>
+        </div>
         <div className="flex flex-1 justify-end">
           <button className=" flex h-max w-max hover:bg-stone-600 hover:bg-opacity-25 duration-300 p-2 rounded-md">
             <svg
