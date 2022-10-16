@@ -1,3 +1,4 @@
+// import { subDays } from "date-fns";
 import { prisma } from "./prisma.server";
 
 export const getShoppingListsByUserId = async (userId: string) => {
@@ -23,5 +24,17 @@ export const createShoppingList = async (userId: string, name: string) => {
 export const getShoppingList = async (listId: string) => {
   return await prisma.shoppingList.findUnique({
     where: { id: listId },
+    include: {
+      // items: {
+      //   where: {
+      //     OR: [{ removed: null }, { removed: { gte: subDays(new Date(), 3) } }],
+      //   },
+      // },
+      items: true,
+    },
   });
 };
+
+export type ShoppingListWithItems = NonNullable<
+  Awaited<ReturnType<typeof getShoppingList>>
+>;

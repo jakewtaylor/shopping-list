@@ -32,4 +32,5 @@ model Item {
   name           String
   shoppingList   ShoppingList @relation(references: [id], fields: [shoppingListId])
   shoppingListId String       @db.ObjectId
+  removed        DateTime?
 }
