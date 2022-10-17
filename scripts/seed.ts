@@ -13,7 +13,7 @@ const seed = async () => {
 
   await prisma.shoppingList.create({
     data: {
-      authorId: user.id,
+      userIds: [user.id],
       name: "Seeded List",
       items: {
         createMany: {
