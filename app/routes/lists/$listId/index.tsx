@@ -42,7 +42,7 @@ export default function List() {
 
   return (
     <div className="h-full bg-stone-300 p-6">
-      <ul className="space-y-2 font-serif text-lg">
+      <ul className="space-y-3">
         {list.items.map((item) => (
           <ListItem key={item.id} item={item as Item} />
         ))}

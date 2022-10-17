@@ -13,7 +13,7 @@ export const ListItem = ({ item }: ListItemProps) => {
     : fetcher.submission;
 
   return (
-    <li>
+    <li className="text-2xl font-serif">
       <fetcher.Form method="post" action={`/list-items/${item.id}/toggle`}>
         <input
           type="submit"
