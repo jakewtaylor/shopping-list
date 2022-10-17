@@ -10,16 +10,29 @@ export const getShoppingListsByUserId = async (userId: string) => {
     },
   });
 
+  console.log(user);
+
   return user?.shoppingLists ?? [];
 };
 
 export const createShoppingList = async (userId: string, name: string) => {
-  return await prisma.shoppingList.create({
+  const shoppingList = await prisma.shoppingList.create({
     data: {
       name,
       authorId: userId,
     },
   });
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      shoppingLists: {
+        connect: { id: shoppingList.id },
+      },
+    },
+  });
+
+  return shoppingList;
 };
 
 export const getShoppingList = async (listId: string) => {
