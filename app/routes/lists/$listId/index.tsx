@@ -68,7 +68,7 @@ export default function List() {
             placeholder="New item"
             required
             autoComplete="off"
-            className="p-4 flex-grow disabled:opacity-50 bg-green-700 focus:outline-none focus:bg-green-50 placeholder:text-green-300 focus:placeholder:text-green-700 text-green-200 focus:text-green-800"
+            className="p-4 flex-grow disabled:opacity-50 bg-green-700 focus:outline-none focus:bg-green-50 placeholder:text-green-300 focus:placeholder:text-green-700 text-green-200 focus:text-green-800 rounded-none"
           />
 
           <button
