@@ -19,7 +19,7 @@ export const createShoppingList = async (userId: string, name: string) => {
   const shoppingList = await prisma.shoppingList.create({
     data: {
       name,
-      authorId: userId,
+      userIds: [userId],
     },
   });
 

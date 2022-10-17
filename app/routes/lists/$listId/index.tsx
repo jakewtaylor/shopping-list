@@ -3,6 +3,7 @@ import type { LoaderFunction } from "@remix-run/node";
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 import { ListItem } from "~/components/ListItem";
+import { canAccessList } from "~/util/auth.server";
 import { notFound } from "~/util/http.server";
 import type { ShoppingListWithItems } from "~/util/shoppingList.server";
 import { getShoppingList } from "~/util/shoppingList.server";
@@ -13,6 +14,7 @@ type LoaderData = {
 
 export const loader: LoaderFunction = async ({
   params,
+  request,
 }): Promise<LoaderData> => {
   const { listId } = params;
 
@@ -21,6 +23,8 @@ export const loader: LoaderFunction = async ({
   const list = await getShoppingList(listId);
 
   if (!list) throw notFound();
+
+  await canAccessList(request, list);
 
   return { list };
 };

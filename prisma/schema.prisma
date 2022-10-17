@@ -11,20 +11,21 @@ datasource db {
 }
 
 model User {
-  id            String         @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  email         String         @unique
-  password      String
-  shoppingLists ShoppingList[]
+  id              String         @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  email           String         @unique
+  password        String
+  shoppingLists   ShoppingList[] @relation(fields: [shoppingListIds], references: [id])
+  shoppingListIds String[]       @db.ObjectId
 }
 
 model ShoppingList {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
-  name     String
-  author   User   @relation(references: [id], fields: [authorId], onDelete: Cascade)
-  authorId String @db.ObjectId
-  items    Item[]
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  name    String
+  users   User[]   @relation(fields: [userIds], references: [id])
+  userIds String[] @db.ObjectId
+  items   Item[]
 }
 
 model Item {
