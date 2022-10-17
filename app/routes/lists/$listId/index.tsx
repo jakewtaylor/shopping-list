@@ -63,6 +63,7 @@ export default function List() {
               placeholder="add to list"
               required
               autoComplete="off"
+              autoFocus
               className="w-full text-2xl font-serif bg-transparent rounded-lg focus:outline-none"
             />
 
