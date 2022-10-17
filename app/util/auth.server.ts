@@ -2,6 +2,8 @@ import { createCookieSessionStorage, json, redirect } from "@remix-run/node";
 import { prisma } from "./prisma.server";
 import { createUser } from "./user.server";
 import bcrypt from "bcrypt";
+import { notFound } from "./http.server";
+import type { ShoppingList } from "@prisma/client";
 
 type User = {
   email: string;
@@ -93,6 +95,12 @@ export async function requireGuest(request: Request) {
   if (userId) {
     throw redirect("/");
   }
+}
+
+export async function canAccessList(request: Request, list: ShoppingList) {
+  const userId = await requireUserId(request);
+
+  if (!list.userIds.includes(userId)) throw notFound();
 }
 
 function getUserSession(request: Request) {
