@@ -1,12 +1,13 @@
 import { Link } from "@remix-run/react";
+import React from "react";
 
-export const MenuBar = () => {
+export const MenuBar = ({ children }: { children?: React.ReactNode }) => {
   return (
-    <div className="bg-green-800 flex items-end">
+    <div className="bg-zinc-800 flex justify-between">
       <Link
         to="/"
         aria-label="Home"
-        className="mr-auto p-4 hover:bg-green-700 text-green-400"
+        className="p-4 hover:bg-zinc-700 text-yellow-400"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -24,10 +25,12 @@ export const MenuBar = () => {
         </svg>
       </Link>
 
+      {children}
+
       <Link
         to="/logout"
         aria-label="Log out"
-        className="p-4 hover:bg-green-700 text-green-400"
+        className="p-4 hover:bg-zinc-700 text-yellow-400"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

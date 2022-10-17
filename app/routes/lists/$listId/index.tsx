@@ -52,46 +52,44 @@ export default function List() {
         {list.items.map((item) => (
           <ListItem key={item.id} item={item as Item} />
         ))}
+
+        <li>
+          <createItemFetcher.Form action="./items" method="post">
+            <input
+              ref={inputRef}
+              disabled={createItemFetcher.state === "submitting"}
+              type="text"
+              name="name"
+              placeholder="add to list"
+              required
+              autoComplete="off"
+              className="w-full text-2xl font-serif bg-transparent rounded-lg focus:outline-none"
+            />
+
+            {/* <button
+              type="submit"
+              className="p-4 bg-green-700 hover:bg-green-800 text-green-400 cursor-pointer"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 4.5v15m7.5-7.5h-15"
+                />
+              </svg>
+            </button> */}
+          </createItemFetcher.Form>
+        </li>
       </ul>
 
       <FixedBottom>
-        <createItemFetcher.Form
-          action="./items"
-          method="post"
-          className="flex bg-green-700"
-        >
-          <input
-            ref={inputRef}
-            disabled={createItemFetcher.state === "submitting"}
-            type="text"
-            name="name"
-            placeholder="New item"
-            required
-            autoComplete="off"
-            className="p-4 flex-grow disabled:opacity-50 bg-green-700 focus:outline-none focus:bg-green-50 placeholder:text-green-300 focus:placeholder:text-green-700 text-green-200 focus:text-green-800 rounded-none"
-          />
-
-          <button
-            type="submit"
-            className="p-4 bg-green-700 hover:bg-green-800 text-green-400 cursor-pointer"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 4.5v15m7.5-7.5h-15"
-              />
-            </svg>
-          </button>
-        </createItemFetcher.Form>
-
         <MenuBar />
       </FixedBottom>
     </div>
