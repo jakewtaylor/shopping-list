@@ -2,7 +2,9 @@ import type { Item } from "@prisma/client";
 import type { LoaderFunction } from "@remix-run/node";
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { useEffect, useRef } from "react";
+import { FixedBottom } from "~/components/FixedBottom";
 import { ListItem } from "~/components/ListItem";
+import { MenuBar } from "~/components/MenuBar";
 import { canAccessList } from "~/util/auth.server";
 import { notFound } from "~/util/http.server";
 import type { ShoppingListWithItems } from "~/util/shoppingList.server";
@@ -52,8 +54,12 @@ export default function List() {
         ))}
       </ul>
 
-      <div className="fixed bottom-0 left-0 right-0 bg-slate-100">
-        <createItemFetcher.Form action="./items" method="post" className="flex">
+      <FixedBottom>
+        <createItemFetcher.Form
+          action="./items"
+          method="post"
+          className="flex bg-green-700"
+        >
           <input
             ref={inputRef}
             disabled={createItemFetcher.state === "submitting"}
@@ -61,16 +67,33 @@ export default function List() {
             name="name"
             placeholder="New item"
             required
-            className="p-4 flex-grow disabled: opacity-50"
+            autoComplete="off"
+            className="p-4 flex-grow disabled:opacity-50 bg-green-700 focus:outline-none focus:bg-green-50 placeholder:text-green-300 focus:placeholder:text-green-700 text-green-200 focus:text-green-800"
           />
 
-          <input
+          <button
             type="submit"
-            value="Add"
-            className="bg-stone-400 p-4 cursor-pointer"
-          />
+            className="p-4 bg-green-700 hover:bg-green-800 text-green-400 cursor-pointer"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 4.5v15m7.5-7.5h-15"
+              />
+            </svg>
+          </button>
         </createItemFetcher.Form>
-      </div>
+
+        <MenuBar />
+      </FixedBottom>
     </div>
   );
 }
