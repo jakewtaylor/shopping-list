@@ -51,7 +51,8 @@ export default function List() {
 
   return (
     <div className="h-full bg-stone-300">
-      <ul className="divide-y divide-stone-900 border-y border-stone-900">
+      {/* <ul className="divide-y divide-stone-900 border-y border-stone-900"> */}
+      <ul className="">
         {list.items.map((item) => (
           <ListItem key={item.id} item={item as Item} />
         ))}
