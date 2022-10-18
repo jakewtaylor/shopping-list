@@ -70,7 +70,7 @@ export default function List() {
               required
               autoComplete="off"
               autoFocus
-              className="w-full text-2xl font-serif bg-transparent rounded-lg focus:outline-none p-4"
+              className="w-full text-2xl bg-transparent rounded-lg focus:outline-none p-4"
             />
           </createItemFetcher.Form>
         </li>

@@ -1,6 +1,7 @@
 import type { Item } from "@prisma/client";
 import { useFetcher } from "@remix-run/react";
 import React from "react";
+import { ReadonlyCheckbox } from "./ReadonlyCheckbox";
 
 type ListItemProps = {
   item: Item;
@@ -28,15 +29,9 @@ export const ListItem = ({ item }: ListItemProps) => {
   return (
     <li className="">
       <button className="p-4 flex items-center w-full" onClick={handleToggle}>
-        <input
-          type="checkbox"
-          readOnly
-          checked={optimisticRemoved}
-          aria-hidden
-          className="pointer-events-none"
-        />
+        <ReadonlyCheckbox checked={optimisticRemoved} />
         <p
-          className={`text-2xl font-serif ml-3 ${
+          className={`text-2xl ml-3 leading-none mb-px ${
             optimisticRemoved ? "line-through" : ""
           }`}
         >
@@ -49,14 +44,9 @@ export const ListItem = ({ item }: ListItemProps) => {
 
 export const OptimisticListItem = ({ item }: ListItemProps) => {
   return (
-    <li className="p-4 flex items-center">
-      <input
-        type="checkbox"
-        readOnly
-        aria-hidden
-        className="pointer-events-none"
-      />
-      <p className="text-2xl font-serif ml-3">{item.name}</p>
+    <li className="p-4 flex items-center opacity-50">
+      <ReadonlyCheckbox checked={false} />
+      <p className="text-2xl ml-3 leading-none">{item.name}</p>
     </li>
   );
 };

@@ -31,20 +31,20 @@ export default function Index() {
           <h1 className="font-bold">Your lists</h1>
           <ul className="list-disc pl-4">
             {shoppingLists.map((shoppingList) => (
-              <li
-                key={shoppingList.id}
-                className="hover:bg-stone-600 hover:bg-opacity-25 rounded-md p-2 duration-300 cursor-pointer"
-              >
+              <li key={shoppingList.id}>
                 <Link
                   to={`/lists/${shoppingList.id}`}
-                  className="text-grey-600"
+                  className="block w-full text-grey-600 hover:bg-stone-600 hover:bg-opacity-25 rounded-md p-2 duration-300"
                 >
                   {shoppingList.name}
                 </Link>
               </li>
             ))}
-            <li className="hover:bg-stone-600 hover:bg-opacity-25 rounded-md p-2">
-              <Link to="/lists/new" className="text-grey-600">
+            <li>
+              <Link
+                to="/lists/new"
+                className="block w-full hover:bg-stone-600 hover:bg-opacity-25 rounded-md p-2 text-grey-600"
+              >
                 Create new list
               </Link>
             </li>
