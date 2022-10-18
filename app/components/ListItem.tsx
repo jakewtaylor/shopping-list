@@ -49,7 +49,7 @@ export const ListItem = ({ item }: ListItemProps) => {
 
 export const OptimisticListItem = ({ item }: ListItemProps) => {
   return (
-    <li className="p-4 flex">
+    <li className="p-4 flex items-center">
       <input
         type="checkbox"
         readOnly
