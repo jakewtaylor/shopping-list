@@ -22,3 +22,12 @@ export const toggleListItem = async (itemId: string) => {
     },
   });
 };
+
+export const renameListItem = async (itemId: string, name: string) => {
+  return await prisma.item.update({
+    where: { id: itemId },
+    data: {
+      name,
+    },
+  });
+};

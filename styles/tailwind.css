@@ -9,13 +9,3 @@
 html, body {
     @apply font-body;
 }
-
-@layer utilities {
-    .strike {
-        @apply relative;
-    }
-    .strike:before {
-        content: '';
-        @apply block h-[2px] w-full bg-current absolute top-[63%];
-    }
-}

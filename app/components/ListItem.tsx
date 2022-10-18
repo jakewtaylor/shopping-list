@@ -1,6 +1,7 @@
 import type { Item } from "@prisma/client";
 import { useFetcher } from "@remix-run/react";
-import React from "react";
+import { useLongPress } from "use-long-press";
+import React, { useEffect, useState } from "react";
 import { ReadonlyCheckbox } from "./ReadonlyCheckbox";
 
 type ListItemProps = {
@@ -8,16 +9,34 @@ type ListItemProps = {
 };
 
 export const ListItem = ({ item }: ListItemProps) => {
-  const fetcher = useFetcher();
+  const toggleFetcher = useFetcher();
+  const renameFetcher = useFetcher();
+
+  const [editing, setEditing] = useState(false);
+
+  let time: number | null = null;
+  const bind = useLongPress(
+    () => {
+      setEditing(true);
+    },
+    {
+      onStart: () => {
+        time = Date.now();
+      },
+      onCancel: () => {
+        if (time && Date.now() - time <= 400) {
+          handleToggle();
+        }
+      },
+    }
+  );
 
   const optimisticRemoved = item.removed
-    ? !fetcher.submission
-    : !!fetcher.submission;
+    ? !toggleFetcher.submission
+    : !!toggleFetcher.submission;
 
-  const handleToggle = (e: React.MouseEvent) => {
-    e.preventDefault();
-
-    fetcher.submit(
+  const handleToggle = () => {
+    toggleFetcher.submit(
       {},
       {
         method: "post",
@@ -26,18 +45,50 @@ export const ListItem = ({ item }: ListItemProps) => {
     );
   };
 
+  useEffect(() => {
+    if (renameFetcher.state === "idle") {
+      setEditing(false);
+    }
+  }, [renameFetcher.state]);
+
   return (
-    <li className="">
-      <button className="p-4 flex items-center w-full" onClick={handleToggle}>
-        <ReadonlyCheckbox checked={optimisticRemoved} />
-        <p
-          className={`text-2xl ml-3 leading-none mb-px ${
-            optimisticRemoved ? "line-through" : ""
-          }`}
+    <li>
+      {editing ? (
+        <div className="flex items-center w-full p-4">
+          <div className="opacity-50">
+            <ReadonlyCheckbox checked={optimisticRemoved} />
+          </div>
+          <renameFetcher.Form
+            method="post"
+            action={`/list-items/${item.id}/update`}
+            className="h-6 mb-px"
+          >
+            <input
+              type="text"
+              name="name"
+              defaultValue={item.name}
+              className="ml-3 bg-none text-2xl h-6 leading-none inline-block box-content border-none bg-transparent focus:outline-none"
+              autoFocus
+              required
+            />
+          </renameFetcher.Form>
+        </div>
+      ) : (
+        <button
+          className="p-4 flex items-center w-full"
+          // onClick={handleToggle}
+          {...bind()}
         >
-          {item.name}
-        </p>
-      </button>
+          <ReadonlyCheckbox checked={optimisticRemoved} />
+          <p
+            className={`text-2xl ml-3 leading-none mb-px ${
+              optimisticRemoved ? "line-through" : ""
+            }`}
+          >
+            {item.name}
+          </p>
+        </button>
+      )}
     </li>
   );
 };

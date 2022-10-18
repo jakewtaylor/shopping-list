@@ -20,7 +20,7 @@ export const meta: MetaFunction = () => ({
 
 export default function App() {
   return (
-    <html lang="en" className="h-full bg-stone-300">
+    <html lang="en" className="h-full bg-stone-300 pb-14 md:pb-0 md:pt-14">
       <head>
         <Meta />
         <Links />
