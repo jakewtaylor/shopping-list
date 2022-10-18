@@ -14,8 +14,9 @@ export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
-  title: "New Remix App",
+  title: "Shopping List",
   viewport: "width=device-width,initial-scale=1",
+  "apple-mobile-web-app-capable": "yes",
 });
 
 export default function App() {
