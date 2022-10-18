@@ -12,7 +12,7 @@ export const action: ActionFunction = async ({ params, request }) => {
 
   const name = form.get("name");
 
-  if (typeof name !== "string") {
+  if (typeof name !== "string" || !name) {
     throw new Error("Invalid");
   }
 
