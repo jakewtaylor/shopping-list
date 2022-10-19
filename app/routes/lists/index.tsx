@@ -1,13 +1,13 @@
-import type { ShoppingList } from "@prisma/client";
 import type { LoaderFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { MenuBar } from "~/components/MenuBar";
 import { requireUserId } from "~/util/auth.server";
+import type { ShoppingListWithItemCount } from "~/util/shoppingList.server";
 import { getShoppingListsByUserId } from "~/util/shoppingList.server";
 
 type LoaderData = {
   userId: string;
-  shoppingLists: ShoppingList[];
+  shoppingLists: ShoppingListWithItemCount[];
 };
 
 export const loader: LoaderFunction = async ({
@@ -26,32 +26,36 @@ export default function Index() {
   return (
     <>
       <MenuBar />
-      <div className="h-full bg-stone-300 p-4 flex">
-        <div className="flex flex-1 w-full">
-          <div className="border border-gray-600 h-fit p-2 rounded-md">
-            <h1 className="font-bold">Your lists</h1>
-            <ul className="list-disc pl-4">
-              {shoppingLists.map((shoppingList) => (
-                <li key={shoppingList.id}>
-                  <Link
-                    to={`/lists/${shoppingList.id}`}
-                    className="block w-full text-grey-600 hover:bg-stone-600 hover:bg-opacity-25 rounded-md p-2 duration-300"
-                  >
-                    {shoppingList.name}
-                  </Link>
-                </li>
-              ))}
-              <li>
-                <Link
-                  to="/lists/new"
-                  className="block w-full hover:bg-stone-600 hover:bg-opacity-25 rounded-md p-2 text-grey-600"
-                >
-                  Create new list
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </div>
+
+      <div className="h-full bg-stone-300 p-4">
+        <h1 className="font-bold text-3xl block mb-3">Your lists</h1>
+        <ul className="grid gap-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+          {shoppingLists.map((shoppingList) => (
+            <li key={shoppingList.id}>
+              <Link
+                to={`/lists/${shoppingList.id}`}
+                className="flex justify-between w-full h-full p-2 bg-white hover:bg-stone-50 transition rounded shadow"
+              >
+                <p className="font-bold text-lg text-stone-700">
+                  {shoppingList.name}
+                </p>
+                <p className="font-sans text-xs bg-stone-700 px-3 py-1 leading-none rounded-full text-stone-100 flex items-center justify-center">
+                  {shoppingList._count.items} items
+                </p>
+              </Link>
+            </li>
+          ))}
+          <li>
+            <Link
+              to="/lists/new"
+              className="block w-full h-full bg-white hover:bg-stone-50 transition bg-opacity-75 rounded shadow p-2"
+            >
+              <p className="text-stone-700 font-bold text-lg text-center">
+                Create new list
+              </p>
+            </Link>
+          </li>
+        </ul>
       </div>
     </>
   );

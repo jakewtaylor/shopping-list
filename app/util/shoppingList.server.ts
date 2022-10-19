@@ -1,4 +1,3 @@
-// import { subDays } from "date-fns";
 import type { Item, ShoppingList } from "@prisma/client";
 import { prisma } from "./prisma.server";
 
@@ -6,11 +5,17 @@ export const getShoppingListsByUserId = async (userId: string) => {
   const user = await prisma.user.findFirst({
     where: { id: userId },
     include: {
-      shoppingLists: true,
+      shoppingLists: {
+        include: {
+          _count: {
+            select: {
+              items: true,
+            },
+          },
+        },
+      },
     },
   });
-
-  console.log(user);
 
   return user?.shoppingLists ?? [];
 };
@@ -50,3 +55,6 @@ export const getShoppingList = async (listId: string) => {
 };
 
 export type ShoppingListWithItems = ShoppingList & { items: Item[] };
+export type ShoppingListWithItemCount = ShoppingList & {
+  _count: { items: number };
+};

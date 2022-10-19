@@ -31,7 +31,7 @@ model ShoppingList {
 model Item {
   id             String       @id @default(auto()) @map("_id") @db.ObjectId
   name           String
-  shoppingList   ShoppingList @relation(references: [id], fields: [shoppingListId])
+  shoppingList   ShoppingList @relation(references: [id], fields: [shoppingListId], onDelete: Cascade)
   shoppingListId String       @db.ObjectId
   removed        DateTime?
 }
