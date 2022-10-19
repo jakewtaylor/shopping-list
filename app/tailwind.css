@@ -857,6 +857,10 @@ video {
   padding-top: 0.5rem;
 }
 
+.pb-\[env\(safe-area-inset-bottom\)\]{
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
 .text-center{
   text-align: center;
 }
