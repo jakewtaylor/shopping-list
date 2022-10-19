@@ -54,6 +54,17 @@ export const getShoppingList = async (listId: string) => {
   });
 };
 
+export const addUserToShoppingList = async (listId: string, userId: string) => {
+  return await prisma.shoppingList.update({
+    where: { id: listId },
+    data: {
+      users: {
+        connect: { id: userId },
+      },
+    },
+  });
+};
+
 export type ShoppingListWithItems = ShoppingList & { items: Item[] };
 export type ShoppingListWithItemCount = ShoppingList & {
   _count: { items: number };

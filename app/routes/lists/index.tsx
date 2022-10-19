@@ -27,7 +27,7 @@ export default function Index() {
     <>
       <MenuBar />
 
-      <div className="h-full bg-stone-300 p-4">
+      <div className="h-full p-4">
         <h1 className="font-bold text-3xl block mb-3">Your lists</h1>
         <ul className="grid gap-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
           {shoppingLists.map((shoppingList) => (

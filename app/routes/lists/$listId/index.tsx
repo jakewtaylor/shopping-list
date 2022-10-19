@@ -1,6 +1,6 @@
 import type { Item } from "@prisma/client";
 import type { LoaderFunction } from "@remix-run/node";
-import { useFetcher, useLoaderData } from "@remix-run/react";
+import { Link, useFetcher, useLoaderData } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 import { ListItem, OptimisticListItem } from "~/components/ListItem";
 import { MenuBar } from "~/components/MenuBar";
@@ -50,7 +50,25 @@ export default function List() {
 
   return (
     <>
-      <MenuBar />
+      <MenuBar>
+        <Link to="share" className="p-4 hover:bg-zinc-700 text-yellow-400">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-6 h-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z"
+            />
+          </svg>
+        </Link>
+      </MenuBar>
+
       <div className="h-full bg-stone-300">
         {/* <ul className="divide-y divide-stone-900 border-y border-stone-900"> */}
         <ul className="">
