@@ -40,7 +40,8 @@ export default function Index() {
                   {shoppingList.name}
                 </p>
                 <p className="font-sans text-xs bg-stone-700 px-3 py-1 leading-none rounded-full text-stone-100 flex items-center justify-center">
-                  {shoppingList._count.items} items
+                  {shoppingList._count.items} item
+                  {shoppingList._count.items == 1 ? "" : "s"}
                 </p>
               </Link>
             </li>
