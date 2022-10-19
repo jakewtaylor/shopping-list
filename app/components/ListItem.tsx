@@ -1,17 +1,20 @@
 import type { Item } from "@prisma/client";
 import { useFetcher } from "@remix-run/react";
 import { useLongPress } from "use-long-press";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ReadonlyCheckbox } from "./ReadonlyCheckbox";
+import type { ToggleResponse } from "~/routes/list-items/$listItemId/toggle";
+import { isErrorResponse } from "~/routes/list-items/$listItemId/toggle";
 
 type ListItemProps = {
   item: Item;
 };
 
 export const ListItem = ({ item }: ListItemProps) => {
-  const toggleFetcher = useFetcher();
+  const toggleFetcher = useFetcher<ToggleResponse>();
   const renameFetcher = useFetcher();
 
+  const [error, setError] = useState<string | null>(null);
   const [editing, setEditing] = useState(false);
 
   let time: number | null = null;
@@ -51,6 +54,20 @@ export const ListItem = ({ item }: ListItemProps) => {
     }
   }, [renameFetcher.state]);
 
+  useEffect(() => {
+    if (toggleFetcher.state === "submitting") {
+      setError(null);
+    }
+  }, [toggleFetcher.state]);
+
+  useEffect(() => {
+    if (isErrorResponse(toggleFetcher.data)) {
+      const { error } = toggleFetcher.data;
+
+      setError(error);
+    }
+  }, [toggleFetcher.data]);
+
   return (
     <li>
       {editing ? (
@@ -74,18 +91,18 @@ export const ListItem = ({ item }: ListItemProps) => {
           </renameFetcher.Form>
         </div>
       ) : (
-        <button
-          className="p-4 flex items-center w-full"
-          // onClick={handleToggle}
-          {...bind()}
-        >
+        <button className="p-4 flex items-center w-full" {...bind()}>
           <ReadonlyCheckbox checked={optimisticRemoved} />
-          <p
-            className={`text-2xl ml-3 leading-none mb-px ${
-              optimisticRemoved ? "line-through" : ""
-            }`}
-          >
-            {item.name}
+          <p className={`text-2xl ml-3 leading-none mb-px text-left`}>
+            <span className={optimisticRemoved ? "line-through" : ""}>
+              {item.name}
+            </span>
+
+            {error ? (
+              <>
+                <span className="block text-red-600 text-sm">{error}</span>
+              </>
+            ) : null}
           </p>
         </button>
       )}
