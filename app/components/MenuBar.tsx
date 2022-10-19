@@ -4,7 +4,7 @@ import React from "react";
 export const MenuBar = ({ children }: { children?: React.ReactNode }) => {
   return (
     <>
-      <div className="bg-zinc-800 flex justify-between h-14 fixed bottom-0 md:bottom-auto md:top-0 left-0 right-0 pb-[env(safe-area-inset-bottom)]">
+      <div className="bg-zinc-800 flex justify-between h-14 fixed bottom-[env(safe-area-inset-bottom)] md:bottom-auto md:top-0 left-0 right-0">
         <Link
           to="/"
           aria-label="Home"

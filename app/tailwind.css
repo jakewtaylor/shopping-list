@@ -573,6 +573,10 @@ video {
   right: 0px;
 }
 
+.bottom-\[env\(safe-area-inset-bottom\)\]{
+  bottom: env(safe-area-inset-bottom);
+}
+
 .mx-auto{
   margin-left: auto;
   margin-right: auto;
