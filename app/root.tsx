@@ -65,7 +65,7 @@ export default function App() {
   }, [location, matches]);
 
   return (
-    <html lang="en" className="h-full bg-stone-300 pb-14 md:pb-0 md:pt-14">
+    <html lang="en" className="h-full bg-stone-300 pb-16 md:pb-0 md:pt-16">
       <head>
         <Meta />
         <Links />

@@ -1,10 +1,29 @@
-import { Link } from "@remix-run/react";
+import { Link, useFetchers, useTransition } from "@remix-run/react";
 import React from "react";
+import { TransitionIndicator } from "./TransitionIndicator";
 
 export const MenuBar = ({ children }: { children?: React.ReactNode }) => {
+  const transition = useTransition();
+  const allFetchers = useFetchers();
+
+  const fetcherTransitioning = allFetchers.some(
+    (fetcher) => fetcher.state !== "idle"
+  );
+
+  const submitting =
+    transition.state === "submitting" ||
+    transition.state === "loading" ||
+    fetcherTransitioning;
+
   return (
     <>
-      <div className="bg-zinc-800 flex justify-between h-14 fixed bottom-[env(safe-area-inset-bottom)] md:bottom-auto md:top-0 left-0 right-0">
+      <TransitionIndicator isTransitioning={submitting} />
+
+      <div
+        className={`bg-zinc-800 flex justify-between h-14 ${
+          submitting ? "h-14 md:h-16 md:pt-2" : "h-14"
+        } fixed bottom-[env(safe-area-inset-bottom)] md:bottom-auto md:top-0 left-0 right-0`}
+      >
         <Link
           to="/"
           aria-label="Home"

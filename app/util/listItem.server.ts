@@ -31,3 +31,9 @@ export const renameListItem = async (itemId: string, name: string) => {
     },
   });
 };
+
+export const deleteListItem = async (itemId: string) => {
+  return await prisma.item.delete({
+    where: { id: itemId },
+  });
+};
