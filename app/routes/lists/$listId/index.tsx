@@ -1,18 +1,21 @@
 import type { Item } from "@prisma/client";
 import type { LoaderFunction } from "@remix-run/node";
-import { Link, useFetcher, useLoaderData } from "@remix-run/react";
+import { Link, useFetcher, useLoaderData, useNavigate } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 import { ListItem, OptimisticListItem } from "~/components/ListItem";
 import { MenuBar } from "~/components/MenuBar";
 import { useOptimisticItem } from "~/useOptimisticItem";
 import { canAccessList } from "~/util/auth.server";
 import { notFound } from "~/util/http.server";
+import { pusher } from "~/util/pusher.client";
+import type { ReloadMessageData } from "~/util/pusher.server";
 import type { ShoppingListWithItems } from "~/util/shoppingList.server";
 import { getShoppingList } from "~/util/shoppingList.server";
 
 type LoaderData = {
   listId: string;
   list: ShoppingListWithItems;
+  userId: string;
 };
 
 export const loader: LoaderFunction = async ({
@@ -27,14 +30,15 @@ export const loader: LoaderFunction = async ({
 
   if (!list) throw notFound();
 
-  await canAccessList(request, list);
+  const { userId } = await canAccessList(request, list);
 
-  return { listId, list };
+  return { listId, list, userId };
 };
 
 export default function List() {
-  const { listId, list } = useLoaderData<LoaderData>();
+  const { listId, list, userId } = useLoaderData<LoaderData>();
 
+  const navigate = useNavigate();
   const createItemFetcher = useFetcher();
   const optimisticItem = useOptimisticItem(createItemFetcher, listId);
 
@@ -47,6 +51,20 @@ export default function List() {
       inputRef.current.value = "";
     }
   }, [createItemFetcher.state]);
+
+  useEffect(() => {
+    const channel = pusher.subscribe(`list-${listId}`);
+
+    channel.bind("reload", (message?: ReloadMessageData) => {
+      if (message && message.userId !== userId) {
+        navigate(".", { replace: true });
+      }
+    });
+
+    return () => {
+      pusher.unsubscribe(`list-${listId}`);
+    };
+  }, [listId, navigate, userId]);
 
   return (
     <>

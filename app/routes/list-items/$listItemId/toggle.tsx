@@ -1,8 +1,10 @@
 import type { Item } from "@prisma/client";
 import type { ActionFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
+import { requireUserId } from "~/util/auth.server";
 import { methodNotAllowed, notFound } from "~/util/http.server";
 import { toggleListItem } from "~/util/listItem.server";
+import { sendReloadMessage } from "~/util/pusher.server";
 
 export type ToggleSuccess = { item: Item };
 export type ToggleError = { error: string };
@@ -13,6 +15,7 @@ export const isErrorResponse = (res?: ToggleResponse): res is ToggleError => {
 };
 
 export const action: ActionFunction = async ({ params, request }) => {
+  const userId = await requireUserId(request);
   if (request.method !== "POST") throw methodNotAllowed();
 
   const { listItemId } = params;
@@ -21,6 +24,8 @@ export const action: ActionFunction = async ({ params, request }) => {
 
   try {
     const item = await toggleListItem(listItemId);
+
+    await sendReloadMessage(item.shoppingListId, userId);
 
     return json<ToggleSuccess>({ item });
   } catch (err) {

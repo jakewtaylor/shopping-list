@@ -101,6 +101,8 @@ export async function canAccessList(request: Request, list: ShoppingList) {
   const userId = await requireUserId(request);
 
   if (!list.userIds.includes(userId)) throw notFound();
+
+  return { userId };
 }
 
 function getUserSession(request: Request) {
