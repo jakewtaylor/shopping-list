@@ -1,14 +1,14 @@
 import type { ActionFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { requireUserId } from "~/util/auth.server";
+// import { requireUserId } from "~/util/auth.server";
 import { methodNotAllowed, notFound } from "~/util/http.server";
 import { renameListItem } from "~/util/listItem.server";
-import { sendReloadMessage } from "~/util/pusher.server";
+// import { sendReloadMessage } from "~/util/pusher.server";
 
 export const action: ActionFunction = async ({ request, params }) => {
   if (request.method !== "POST") throw methodNotAllowed();
 
-  const userId = await requireUserId(request);
+  // const userId = await requireUserId(request);
 
   const { listItemId } = params;
 
@@ -19,9 +19,9 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   if (typeof newName !== "string") throw new Error("Invalid");
 
-  const item = await renameListItem(listItemId, newName);
+  const item = await renameListItem(request, listItemId, newName);
 
-  await sendReloadMessage(item.shoppingListId, userId);
+  // await sendReloadMessage(item.shoppingListId, userId);
 
   return json({ item });
 };

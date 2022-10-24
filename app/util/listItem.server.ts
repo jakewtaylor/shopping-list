@@ -1,39 +1,73 @@
-import { notFound } from "./http.server";
-import { prisma } from "./prisma.server";
+import { authApi } from "./api.server";
+import { requireAuthToken } from "./auth2.server";
 
-export const createListItem = async (listId: string, item: string) => {
-  return await prisma.item.create({
-    data: {
-      shoppingListId: listId,
-      name: item,
-    },
-  });
+export const createListItem = async (
+  request: Request,
+  listId: string,
+  name: string
+) => {
+  const token = await requireAuthToken(request);
+
+  try {
+    const res = await authApi(token).post(
+      `/shopping-lists/${listId}/list-items`,
+      {
+        name,
+      }
+    );
+
+    return res.data;
+  } catch (err) {
+    console.log(err);
+
+    throw err;
+  }
 };
 
-export const toggleListItem = async (itemId: string) => {
-  const item = await prisma.item.findUnique({ where: { id: itemId } });
+export const toggleListItem = async (request: Request, itemId: string) => {
+  const token = await requireAuthToken(request);
 
-  if (!item) throw notFound();
+  try {
+    const res = await authApi(token).post(`/list-items/${itemId}/toggle`);
 
-  return await prisma.item.update({
-    where: { id: itemId },
-    data: {
-      removed: item.removed ? null : new Date(),
-    },
-  });
+    return res.data;
+  } catch (err) {
+    console.log(err);
+
+    throw err;
+  }
 };
 
-export const renameListItem = async (itemId: string, name: string) => {
-  return await prisma.item.update({
-    where: { id: itemId },
-    data: {
+export const renameListItem = async (
+  request: Request,
+  itemId: string,
+  name: string
+) => {
+  const token = await requireAuthToken(request);
+
+  try {
+    const res = await authApi(token).patch(`/list-items/${itemId}`, {
       name,
-    },
-  });
+    });
+
+    return res.data;
+  } catch (err) {
+    console.log(err);
+
+    throw err;
+  }
 };
 
-export const deleteListItem = async (itemId: string) => {
-  return await prisma.item.delete({
-    where: { id: itemId },
-  });
+export const deleteListItem = async (request: Request, itemId: string) => {
+  const token = await requireAuthToken(request);
+
+  try {
+    const res = await authApi(token).delete(`/list-items/${itemId}`);
+
+    return res.data;
+  } catch (err) {
+    console.log(err);
+
+    throw err;
+  }
 };

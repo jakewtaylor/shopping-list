@@ -1,12 +1,9 @@
 import type { ActionFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { Card } from "~/components/Card";
-import { requireUserId } from "~/util/auth.server";
 import { createShoppingList } from "~/util/shoppingList.server";
 
 export const action: ActionFunction = async ({ request }) => {
-  const userId = await requireUserId(request);
-
   const form = await request.formData();
 
   const listName = form.get("name");
@@ -15,7 +12,7 @@ export const action: ActionFunction = async ({ request }) => {
     throw new Error("invalid");
   }
 
-  const list = await createShoppingList(userId, listName);
+  const list = await createShoppingList(request, listName);
 
   return redirect(`/lists/${list.id}`);
 };

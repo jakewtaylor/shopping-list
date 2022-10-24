@@ -1,18 +1,18 @@
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 import { Card } from "~/components/Card";
-import { login, requireGuest } from "~/util/auth.server";
+import { login, requireGuest } from "~/util/auth2.server";
 
 export const action: ActionFunction = async ({ request }) => {
   const form = await request.formData();
-  const email = form.get("email");
+  const username = form.get("username");
   const password = form.get("password");
 
-  if (typeof email !== "string" || typeof password !== "string") {
+  if (typeof username !== "string" || typeof password !== "string") {
     throw new Error("Invalid");
   }
 
-  return login({ email, password });
+  return await login(request, { username, password });
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -48,9 +48,9 @@ export default function Login() {
                 </svg>
               </div>
               <input
-                type="email"
-                name="email"
-                placeholder="Email"
+                type="text"
+                name="username"
+                placeholder="Username"
                 className="bg-[#fdfcf4] rounded-r-sm p-2 w-full"
                 required
               />

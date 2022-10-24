@@ -1,9 +1,9 @@
 import type { ActionFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { requireUserId } from "~/util/auth.server";
+// import { requireUserId } from "~/util/auth.server";
 import { methodNotAllowed, notFound } from "~/util/http.server";
 import { deleteListItem } from "~/util/listItem.server";
-import { sendReloadMessage } from "~/util/pusher.server";
+// import { sendReloadMessage } from "~/util/pusher.server";
 
 export type DeleteSuccess = { success: true };
 export type DeleteError = { error: string };
@@ -20,12 +20,12 @@ export const action: ActionFunction = async ({ params, request }) => {
 
   if (!listItemId) throw notFound();
 
-  const userId = await requireUserId(request);
+  // const userId = await requireUserId(request);
 
   try {
-    const item = await deleteListItem(listItemId);
+    await deleteListItem(request, listItemId);
 
-    await sendReloadMessage(item.shoppingListId, userId);
+    // await sendReloadMessage(item.shoppingListId, userId);
 
     return json<DeleteSuccess>({ success: true });
   } catch (err) {

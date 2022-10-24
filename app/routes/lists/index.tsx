@@ -1,27 +1,28 @@
 import type { LoaderFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { MenuBar } from "~/components/MenuBar";
-import { requireUserId } from "~/util/auth.server";
-import type { ShoppingListWithItemCount } from "~/util/shoppingList.server";
-import { getShoppingListsByUserId } from "~/util/shoppingList.server";
+import { requireUser } from "~/util/auth2.server";
+import { getShoppingLists } from "~/util/shoppingList.server";
 
 type LoaderData = {
-  userId: string;
-  shoppingLists: ShoppingListWithItemCount[];
+  userId: number;
+  shoppingLists: any;
 };
 
 export const loader: LoaderFunction = async ({
   request,
 }): Promise<LoaderData> => {
-  const userId = await requireUserId(request);
+  const user = await requireUser(request);
 
-  const shoppingLists = await getShoppingListsByUserId(userId);
+  const shoppingLists = await getShoppingLists(request);
 
-  return { userId, shoppingLists };
+  return { userId: user.id, shoppingLists };
 };
 
 export default function Index() {
   const { shoppingLists } = useLoaderData<LoaderData>();
+
+  console.log(shoppingLists);
 
   return (
     <>
@@ -30,7 +31,7 @@ export default function Index() {
       <div className="h-full p-4">
         <h1 className="font-bold text-3xl block mb-3">Your lists</h1>
         <ul className="grid gap-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-          {shoppingLists.map((shoppingList) => (
+          {shoppingLists.map((shoppingList: any) => (
             <li key={shoppingList.id}>
               <Link
                 to={`/lists/${shoppingList.id}`}
@@ -40,8 +41,8 @@ export default function Index() {
                   {shoppingList.name}
                 </p>
                 <p className="font-sans text-xs bg-stone-700 px-3 py-1 leading-none rounded-full text-stone-100 flex items-center justify-center">
-                  {shoppingList._count.items} item
-                  {shoppingList._count.items == 1 ? "" : "s"}
+                  {shoppingList.items_count} item
+                  {shoppingList.items_count == 1 ? "" : "s"}
                 </p>
               </Link>
             </li>

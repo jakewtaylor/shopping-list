@@ -1,57 +1,44 @@
 import type { Item, ShoppingList } from "@prisma/client";
+import { authApi } from "./api.server";
+import { requireAuthToken } from "./auth2.server";
 import { prisma } from "./prisma.server";
 
-export const getShoppingListsByUserId = async (userId: string) => {
-  const user = await prisma.user.findFirst({
-    where: { id: userId },
-    include: {
-      shoppingLists: {
-        include: {
-          _count: {
-            select: {
-              items: true,
-            },
-          },
-        },
-      },
-    },
-  });
+export const getShoppingLists = async (request: Request) => {
+  const token = await requireAuthToken(request);
 
-  return user?.shoppingLists ?? [];
+  const res = await authApi(token).get("/shopping-lists");
+
+  return res.data;
 };
 
-export const createShoppingList = async (userId: string, name: string) => {
-  const shoppingList = await prisma.shoppingList.create({
-    data: {
+export const createShoppingList = async (request: Request, name: string) => {
+  const token = await requireAuthToken(request);
+
+  try {
+    const res = await authApi(token).post("/shopping-lists", {
       name,
-      userIds: [userId],
-    },
-  });
+    });
 
-  await prisma.user.update({
-    where: { id: userId },
-    data: {
-      shoppingLists: {
-        connect: { id: shoppingList.id },
-      },
-    },
-  });
+    return res.data;
+  } catch (err) {
+    console.log(err);
 
-  return shoppingList;
+    throw err;
+  }
 };
 
-export const getShoppingList = async (listId: string) => {
-  return await prisma.shoppingList.findUnique({
-    where: { id: listId },
-    include: {
-      // items: {
-      //   where: {
-      //     OR: [{ removed: null }, { removed: { gte: subDays(new Date(), 3) } }],
-      //   },
-      // },
-      items: true,
-    },
-  });
+export const getShoppingList = async (request: Request, listId: string) => {
+  const token = await requireAuthToken(request);
+
+  try {
+    const res = await authApi(token).get(`/shopping-lists/${listId}`);
+
+    return res.data;
+  } catch (err) {
+    console.log(err);
+
+    throw err;
+  }
 };
 
 export const addUserToShoppingList = async (listId: string, userId: string) => {

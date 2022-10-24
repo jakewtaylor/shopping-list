@@ -1,9 +1,9 @@
 import type { LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { requireUserId } from "~/util/auth.server";
+import { requireAuthToken } from "~/util/auth2.server";
 
 export const loader: LoaderFunction = async ({ request }) => {
-  await requireUserId(request);
+  await requireAuthToken(request);
 
   return redirect("/lists");
 };

@@ -5,7 +5,6 @@ import { useEffect, useRef } from "react";
 import { ListItem, OptimisticListItem } from "~/components/ListItem";
 import { MenuBar } from "~/components/MenuBar";
 import { useOptimisticItem } from "~/useOptimisticItem";
-import { canAccessList } from "~/util/auth.server";
 import { notFound } from "~/util/http.server";
 import { pusher } from "~/util/pusher.client";
 import type { ReloadMessageData } from "~/util/pusher.server";
@@ -26,13 +25,11 @@ export const loader: LoaderFunction = async ({
 
   if (!listId) throw notFound();
 
-  const list = await getShoppingList(listId);
+  const list = await getShoppingList(request, listId);
 
   if (!list) throw notFound();
 
-  const { userId } = await canAccessList(request, list);
-
-  return { listId, list, userId };
+  return { listId, list, userId: "" };
 };
 
 export default function List() {
