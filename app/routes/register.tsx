@@ -2,8 +2,7 @@ import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { useActionData } from "@remix-run/react";
 import { Link } from "react-router-dom";
 import { Card } from "~/components/Card";
-import { requireGuest } from "~/util/auth.server";
-import { register } from "~/util/auth2.server";
+import { register, requireGuest } from "~/util/auth2.server";
 
 type ActionData = any;
 

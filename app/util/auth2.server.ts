@@ -139,3 +139,13 @@ const unauthorizedRedirect = (redirectTo: string) => {
 
   return redirect(`/login?${searchParams}`);
 };
+
+export const logout = async (request: Request) => {
+  const session = await getUserSession(request);
+
+  return redirect("/login", {
+    headers: {
+      "Set-Cookie": await storage.destroySession(session),
+    },
+  });
+};
